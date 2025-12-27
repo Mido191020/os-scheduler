@@ -1,4 +1,4 @@
-# SchedLab: CPU Scheduling Simulator
+# CPU Scheduling Simulator
 
 A simple C++ simulator for CPU scheduling algorithms based on OSTEP concepts.
 
