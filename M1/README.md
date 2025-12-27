@@ -1,4 +1,4 @@
-# CPU Scheduling Simulator
+# SchedLab: CPU Scheduling Simulator
 
 A simple C++ simulator for CPU scheduling algorithms based on OSTEP concepts.
 
@@ -14,9 +14,16 @@ Shortest Job First scheduling that solves the Convoy Effect by running shortest 
 
 ## Build & Run
 
+**FIFO Scheduler:**
 ```bash
-g++ main.cpp -o scheduler
-./scheduler
+g++ FIFO_ALGORITHM.cpp -o fifo
+./fifo
+```
+
+**SJF Scheduler:**
+```bash
+g++ SJF_Scheduler_ALGORITHM.cpp -o sjf
+./sjf
 ```
 
 ## Example Results
