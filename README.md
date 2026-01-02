@@ -107,11 +107,3 @@ g++ main.cpp -o main
 * [x] **M4:** Round Robin (Optimize Response Time)
 * [ ] **M5:** I/O Overlap Simulation
 * [ ] **M6:** Multi-Level Feedback Queue (MLFQ)
-
-## 📄 License
-
-This project is educational and open for academic use.
-
-```
-
-```
