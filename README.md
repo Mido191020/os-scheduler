@@ -30,9 +30,13 @@ This simulator helps you understand how different CPU scheduling algorithms work
 
 ### Milestone 1: FIFO (First-In, First-Out)
 
-**How it works:** Jobs execute in the order they arrive.
+First Come First Served (FIFO/FCFS) is a scheduling algorithm in which the process that arrives first is executed first. It is a simple and easy-to-understand algorithm, but it can lead to poor performance if there are processes with long burst times.
 
-**The problem:** Long jobs create a "convoy effect" where short jobs get stuck waiting behind them, causing poor average turnaround time.
+**How it works:** Jobs execute in the order they arrive. The process that arrives first is executed first, regardless of its burst time or priority.
+
+**The problem:** Long jobs create a "convoy effect" where short jobs get stuck waiting behind them, causing poor average turnaround time. This algorithm does not have any mechanism for prioritizing processes, so it is considered a non-preemptive algorithm.
+
+**Use case:** Commonly used in batch systems where the order of the processes is important.
 
 **Status:** Implemented in `M1/` and `main.cpp`
 
@@ -40,11 +44,13 @@ This simulator helps you understand how different CPU scheduling algorithms work
 
 ### Milestone 2: SJF (Shortest Job First)
 
-**How it works:** Always picks the job with the shortest total duration.
+Shortest Process Next (SJF/SPN) is a scheduling algorithm that prioritizes the execution of processes based on their burst time, or the amount of time they need to complete their task. It is a non-preemptive algorithm which means that once a process starts executing, it runs until completion or until it enters a waiting state.
 
-**What it solves:** Eliminates the convoy effect by prioritizing short jobs.
+**How it works:** The algorithm maintains a queue of processes, where each process is given a burst time when it arrives. The process with the shortest burst time is executed first, and as new processes arrive, they are added to the queue and sorted based on their burst time.
 
-**The limitation:** Non-preemptive design means it can't interrupt a running job, even if a shorter one arrives.
+**What it solves:** Eliminates the convoy effect by prioritizing short jobs. This can be beneficial in situations where the objective is to minimize the average waiting time for processes, since shorter processes will be executed first.
+
+**The limitation:** Non-preemptive design means it can't interrupt a running job, even if a shorter one arrives. This can lead to longer running processes being blocked by shorter ones in some scenarios.
 
 **Status:** Implemented in `M2_STCF/` and `main.cpp`
 
@@ -52,11 +58,13 @@ This simulator helps you understand how different CPU scheduling algorithms work
 
 ### Milestone 3: STCF (Shortest Time-to-Completion First)
 
-**How it works:** Preemptive version of SJF. At every tick, the scheduler checks if any job has less remaining time than the current one.
+Shortest Remaining Time (STCF/SRT) is a scheduling algorithm that is similar to the Shortest Process Next (SPN) algorithm, but it is a preemptive algorithm. This means that once a process starts executing, it can be interrupted by a new process with a shorter remaining time.
 
-**What it solves:** Handles late arrivals efficiently through preemption.
+**How it works:** The algorithm maintains a queue of processes, where each process is given a burst time when it arrives. At every tick, the scheduler checks if any job has less remaining time than the current one. The process with the shortest remaining time is executed first, and as new processes arrive, they are added to the queue and sorted based on their remaining time.
 
-**Performance:** Achieves optimal average turnaround time.
+**What it solves:** Handles late arrivals efficiently through preemption. The algorithm can adapt to changes in the remaining time as processes execute, making it useful when burst time is not known in advance.
+
+**Performance:** Achieves optimal average turnaround time. Minimizes average waiting time for processes since shorter processes will be executed first.
 
 **Status:** Implemented in `M2_STCF/` and `main.cpp`
 
@@ -64,13 +72,15 @@ This simulator helps you understand how different CPU scheduling algorithms work
 
 ### Milestone 4: Round Robin (RR)
 
-**How it works:** Each job runs for a fixed time slice (quantum) before the scheduler switches to the next job in a circular queue.
+Round Robin (RR) is a scheduling algorithm that uses a time-sharing approach to divide CPU time among processes. Each job runs for a fixed time slice (quantum) before the scheduler switches to the next job in a circular queue.
 
-**What it solves:** Optimizes response time and fairness. No job waits too long before getting CPU time, which is critical for interactive systems.
+**How it works:** The algorithm maintains a queue of processes, where each process is given a quantum of time to execute on the CPU. When a process's quantum expires, it is moved to the back of the queue, and the next process in the queue is given a quantum of time to execute.
 
-**The trade-off:** Average turnaround time suffers compared to STCF/SJF due to constant context switching.
+**What it solves:** Optimizes response time and fairness. No job waits too long before getting CPU time, which is critical for interactive systems. This helps to avoid the issue of starvation, which occurs when a process with a long burst time prevents other processes from executing.
 
-**Status:** Implemented in `main.cpp`
+**The trade-off:** Average turnaround time suffers compared to STCF/SJF due to constant context switching. The quantum can be adjusted depending on the requirements of the system.
+
+**Status:** Implemented in `M3_Round_Robin/` and `main.cpp`
 
 ---
 
