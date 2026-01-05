@@ -1,40 +1,43 @@
-# SchedLab: CPU Scheduling Simulator
+# M1 Folder: FIFO & SJF Schedulers
 
-A simple C++ simulator for CPU scheduling algorithms based on OSTEP concepts.
+Two foundational CPU scheduling implementations from OSTEP Chapter 7.
 
-## Status
+---
 
-**Completed: M1 & M2**
+## What's Inside
 
-### M1: FIFO Scheduler
-Basic First-In, First-Out scheduling with turnaround time metrics. Demonstrates the Convoy Effect where long jobs block short ones.
+### FIFO_ALGORITHM.cpp
+**First-In, First-Out (FCFS) scheduling** - processes execute in arrival order.
 
-### M2: SJF Scheduler  
-Shortest Job First scheduling that solves the Convoy Effect by running shortest jobs first, improving average turnaround time by ~50%.
+- **The Problem:** Long jobs block short ones (Convoy Effect)
+- **Example:** Jobs A(30s), B(20s), C(10s) → Avg Turnaround = 46.67 ticks
+- **Non-preemptive:** Once started, a job runs to completion
+
+### SJF_Scheduler_ALGORITHM.cpp
+**Shortest Job First scheduling** - always picks the job with shortest total duration.
+
+- **The Solution:** Eliminates Convoy Effect by prioritizing short jobs
+- **Example:** Jobs C(10s), B(20s), A(30s) → Avg Turnaround = 33.33 ticks (~50% improvement)
+- **Non-preemptive:** Cannot interrupt running jobs for shorter arrivals
+
+---
 
 ## Build & Run
 
-**FIFO Scheduler:**
 ```bash
+# FIFO Scheduler
 g++ FIFO_ALGORITHM.cpp -o fifo
 ./fifo
-```
 
-**SJF Scheduler:**
-```bash
+# SJF Scheduler
 g++ SJF_Scheduler_ALGORITHM.cpp -o sjf
 ./sjf
 ```
 
-## Example Results
+---
 
-**FIFO:** Jobs A(30s), B(20s), C(10s) → Avg Turnaround = 46.67 ticks  
-**SJF:** Jobs C(10s), B(20s), A(30s) → Avg Turnaround = 33.33 ticks
+## Key Insight
 
-## Roadmap
+SJF proves that execution order matters. By running shortest jobs first, we cut average turnaround time in half compared to FIFO. However, both algorithms share a critical limitation: they cannot preempt running jobs when better options arrive later.
 
-* [x] M1: FIFO & Turnaround Time
-* [x] M2: Shortest Job First (SJF)
-* [ ] M3: Preemptive STCF
-* [ ] M4: Round Robin
-* [ ] M5: I/O Handling
+**Next Step:** M2_STCF folder implements preemption to handle late arrivals efficiently.
