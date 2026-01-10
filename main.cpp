@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <vector>
 #include <cstdlib> // for rand()
 #include <ctime>   // for time()
@@ -66,7 +67,6 @@ void run_scheduler(vector<Job>& run_queue) {
         // TODO: 4. Check if winner finished (remaining <= 0)
     }
 }
-
 int main() {
     vector<Job> queue = setup_workload();
     run_scheduler(queue);

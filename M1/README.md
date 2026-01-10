@@ -1,113 +1,43 @@
-## 🚀 Current Status: Milestone 1 (FIFO) 
+# M1 Folder: FIFO & SJF Schedulers
 
-The project currently implements a basic **First-In, First-Out (FIFO)** scheduler to demonstrate the fundamental trade-offs in batch processing systems. 
+Two foundational CPU scheduling implementations from OSTEP Chapter 7.
 
- 
+---
 
-### Features 
+## What's Inside
 
-* **Tick-based Simulation Engine:** Simulates CPU cycles and state transitions. 
+### FIFO_ALGORITHM.cpp
+**First-In, First-Out (FCFS) scheduling** - processes execute in arrival order.
 
-* **Job Abstraction:** Tracks Process ID, Arrival Time, Duration, and Remaining Time. 
+- **The Problem:** Long jobs block short ones (Convoy Effect)
+- **Example:** Jobs A(30s), B(20s), C(10s) → Avg Turnaround = 46.67 ticks
+- **Non-preemptive:** Once started, a job runs to completion
 
-* **FIFO Policy:** Implements non-preemptive scheduling based on arrival order. 
+### SJF_Scheduler_ALGORITHM.cpp
+**Shortest Job First scheduling** - always picks the job with shortest total duration.
 
-* **Metrics:** Calculates **Turnaround Time** and system average. 
+- **The Solution:** Eliminates Convoy Effect by prioritizing short jobs
+- **Example:** Jobs C(10s), B(20s), A(30s) → Avg Turnaround = 33.33 ticks (~50% improvement)
+- **Non-preemptive:** Cannot interrupt running jobs for shorter arrivals
 
-* **Convoy Effect Demo:** Demonstrates how long jobs blocking short jobs degrades system performance (Average Turnaround doubled from ~33 to ~66 ticks). 
+---
 
- 
+## Build & Run
 
-## 🛠️ How to Build & Run 
+```bash
+# FIFO Scheduler
+g++ FIFO_ALGORITHM.cpp -o fifo
+./fifo
 
- 
-
-**Prerequisites:** 
-
-* C++ Compiler (GCC/Clang/MSVC) 
-
-* Make or CMake (Optional, currently single file) 
-
- 
-
-**Build:** 
-
-```bash 
-
-g++ main.cpp -o scheduler 
-
- 
-
-``` 
-
- 
-
-**Run:** 
-
- 
-
-```bash 
-
-./scheduler 
-
- 
-
-``` 
-
- 
-
-## 📊 Example Output 
-
- 
-
-```text 
-
-Time 0: Running Job 1 
-
-... 
-
-Job 1 Finished at time 10 
-
-... 
-
-Job 3 Finished at time 60 
-
- 
-
---- Final Metrics --- 
-
-Job 1: Turnaround Time = 10 ticks 
-
-Job 2: Turnaround Time = 30 ticks 
-
-Job 3: Turnaround Time = 60 ticks 
-
--------------------------------- 
-
-Average Turnaround Time = 33.3333 ticks 
-
--------------------------------- 
-
- 
-
-``` 
-
- 
-
-## 📚 Roadmap 
-
- 
-
-* [x] **M1: FIFO & Turnaround Time** 
-
-* [ ] M2: Shortest Job First (SJF) 
-
-* [ ] M3: Preemption & STCF 
-
-* [ ] M4: Round Robin & Response Time 
-
-* [ ] M5: I/O Overlap 
-
- 
-
+# SJF Scheduler
+g++ SJF_Scheduler_ALGORITHM.cpp -o sjf
+./sjf
 ```
+
+---
+
+## Key Insight
+
+SJF proves that execution order matters. By running shortest jobs first, we cut average turnaround time in half compared to FIFO. However, both algorithms share a critical limitation: they cannot preempt running jobs when better options arrive later.
+
+**Next Step:** M2_STCF folder implements preemption to handle late arrivals efficiently.
