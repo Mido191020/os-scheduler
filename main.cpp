@@ -1,101 +1,74 @@
 #include <iostream>
 #include <queue>
 #include <vector>
-#include <climits>
+#include <cstdlib> // for rand()
+#include <ctime>   // for time()
 
 using namespace std;
 
-typedef enum{
-    READY, RUNNING, FINISHED
-}status;
-//RR
-//time slice between process
-//
+// 1. Define the State
+typedef enum { READY, RUNNING, FINISHED } status;
+
 typedef struct {
     int Id;
-    int arrival_time=0;
-    int duration=0;
-    int remaining=0;
-    int completion_time=0;
-    int first_run_time = -1; // -1 means "Never touched the CPU"
-    status job_status;
-}jobs;
-vector<jobs> generate_workload(){
-    vector<jobs> workload;
-    int num_jobs = 10;
+    int tickets;             // The "share" of the CPU
+    int duration;            // Total time needed
+    int remaining;           // Time left to run
+    int first_run_time = -1; // Stats
+    int completion_time = 0; // Stats
+} Job;
 
-    for (int i = 0; i < num_jobs; ++i) {
-        jobs newJob;
-        newJob.Id = i + 1;
-        newJob.arrival_time = 0;
-        newJob.duration = (num_jobs - i) * 10;
+// 2. Setup the World (Policy)
+vector<Job> setup_workload() {
+    vector<Job> workload;
 
-        newJob.remaining = newJob.duration;
-        newJob.job_status = READY;
-        workload.push_back(newJob);
-    }
+    // Example: 3 Jobs with different Ticket counts
+    // Job A: Short but high priority (100 tickets)
+    workload.push_back({1, 100, 5, 5});
+
+    // Job B: Long and low priority (50 tickets)
+    workload.push_back({2, 50, 20, 20});
+
+    // Job C: Medium (10 tickets)
+    workload.push_back({3, 10, 10, 10});
+
     return workload;
 }
-void RR(){
-    vector<jobs >tasks=generate_workload();
-    int current_time=0;
-    int completed_jobs=0;
-    int time_quantum = 2;
-    int x=0;
-    while (completed_jobs<tasks.size()){
-        //how I can swap between them
-        //the idea is -> we will do the smae each time condation ?
-        jobs *current_job=&tasks[x];
-        if (current_job->job_status==FINISHED){
-            x=(x+1)%tasks.size();
-            continue;
-        }
-        int min_time= min(time_quantum,current_job->remaining);
-        for (int i = 0; i < min_time; ++i) {
 
-            if (current_job->first_run_time==-1)current_job->first_run_time=current_time;
+// 3. The Lottery Mechanism (YOUR TASK)
+void run_scheduler(vector<Job>& run_queue) {
+    int time_slice = 1; // The "Quantum"
+    int current_time = 0;
 
-            current_job->remaining--;
-            current_time++;
+    srand(time(0)); // Seed random number generator
 
-            cout << "Time " << current_time << " : Job " << current_job->Id
-                 << " running. Remaining: " << current_job->remaining << endl;
+    // Loop until all jobs are finished (remaining == 0)
+    while (true) {
 
-            if (current_job->remaining==0){
-                current_job->completion_time=current_job->completion_time+current_time;
-                current_job->job_status=FINISHED;
-                completed_jobs++;
-                break;
-            }
-            
+        // CHECK: Are all jobs done? If yes, break.
+        bool all_done = true;
+        int total_tickets = 0;
 
-        }
-        x = (x + 1) % tasks.size();
+        // TODO: Loop to calculate total_tickets of ACTIVE jobs only
+        // (Don't count finished jobs!)
+
+        if (total_tickets == 0) break; // Everyone is done
+
+        // TODO: 1. Pick a random number (winner) between 0 and total_tickets-1
+
+        // TODO: 2. Find the winner using the subtraction/accumulation loop
+
+        // TODO: 3. "Run" the winner:
+        //      - Print "Time X: Job Y won"
+        //      - Decrement winner.remaining by time_slice
+        //      - Update first_run_time if it's -1
+        //      - Update current_time
+
+        // TODO: 4. Check if winner finished (remaining <= 0)
     }
-    cout<<"done RR\n";
-
-    // --- Metrics ---
-    cout << "\n--- Final Metrics ---\n";
-    double total_turnaround = 0;
-    double total_response = 0;
-
-    for (int i = 0; i < tasks.size(); ++i) {
-        int turnaround = tasks[i].completion_time - tasks[i].arrival_time;
-        int response = tasks[i].first_run_time - tasks[i].arrival_time;
-
-        total_turnaround += turnaround;
-        total_response += response;
-
-        cout << "Job " << tasks[i].Id
-             << ": Turnaround = " << turnaround
-             << ", Response = " << response << " ticks\n";
-    }
-
-    cout << "--------------------------------\n";
-    cout << "Avg Turnaround = " << total_turnaround / tasks.size() << " ticks\n";
-    cout << "Avg Response   = " << total_response / tasks.size() << " ticks (This should be low!)\n";
-    cout << "--------------------------------\n";
 }
 int main() {
-    RR();
+    vector<Job> queue = setup_workload();
+    run_scheduler(queue);
+    return 0;
 }
