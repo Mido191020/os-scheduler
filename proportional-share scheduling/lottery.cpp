@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib> // for rand()
 #include <ctime>   // for time()
+#include <algorithm> // for min
 
 using namespace std;
 
@@ -35,7 +36,7 @@ vector<Job> setup_workload() {
     return workload;
 }
 
-// 3. The Lottery Mechanism (YOUR TASK)
+// 3. The Lottery Mechanism
 void run_scheduler(vector<Job>& run_queue) {
     int time_slice = 1; // The "Quantum"
     int current_time = 0;
@@ -44,7 +45,7 @@ void run_scheduler(vector<Job>& run_queue) {
     srand(time(0)); // Seed random number generator
 
     // Loop until all jobs are finished
-    while (completed_jobs < run_queue.size()) {
+    while (completed_jobs < (int)run_queue.size()) {
         
         int total_tickets = 0;
         // 0. Calculate total_tickets of ACTIVE jobs only
